@@ -27,7 +27,7 @@ class TCXParser:
         return [x.text for x in self.root.xpath('//ns:Time', namespaces={'ns': namespace})]
 
     def cadence_values(self):
-        return [int(x.text) for x in self.root.xpath('//ns:Cadence', namespaces={'ns': namespace})]
+        return [int(x.text) for x in self.root.xpath('//ns:Trackpoint/ns:Cadence', namespaces={'ns': namespace})]
 
     @property
     def latitude(self):
@@ -49,7 +49,8 @@ class TCXParser:
 
     @property
     def cadence_avg(self):
-        return self.activity.Lap[-1].Cadence
+        cadence_values = self.cadence_values()
+        return sum(cadence_values) / len(cadence_values) if cadence_values else 0.0
 
     @property
     def distance(self):
